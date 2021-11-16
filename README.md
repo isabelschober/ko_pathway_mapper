@@ -6,5 +6,5 @@ Usage:
 
 bloastkoala_pathway_mapper.py -k <BlastKOALA results> -d <KEGG database file> (-o <output file>)
 
-KEGG database file from https://www.genome.jp/kegg-bin/get_htext?ko00001.keg 
+KEGG database file from https://www.genome.jp/kegg-bin/get_htext?ko00001.keg      
 Click "Download htext"

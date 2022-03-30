@@ -1,6 +1,6 @@
 # ko_pathway_mapper
 
-Find corresponding pathways to list of KOs from BlastKOALA results
+Find corresponding pathways for a list of KOs from BlastKOALA results
 
 Usage:
 

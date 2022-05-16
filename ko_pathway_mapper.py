@@ -7,10 +7,14 @@ import argparse
 Find corresponding pathways to list of KOs from BlastKOALA results
 
 Usage:
-ko_pathway_mapper.py -k <BlastKOALA results> -d <KEGG database file> (-o <output file>)
+
+bloastkoala_pathway_mapper.py -k <BlastKOALA results> -d <KEGG database file> (-o <output file>)
 
 KEGG database file from https://www.genome.jp/kegg-bin/get_htext?ko00001.keg 
 Click "Download htext"
+
+
+When KOs are listed for several pathways, these are separated by double slashes "//" in the output.
 
 '''
 def database(db):
@@ -33,9 +37,9 @@ def database(db):
 		elif line.startswith("C"):
 			C=line[4:].strip()
 		elif line.startswith("D") and lsplit[6] in keg.keys():
-			keg[lsplit[6]].append([C,B,A])
+			keg[lsplit[6]].append(C+" - "+B+" - "+A)
 		elif line.startswith("D"):
-			keg[lsplit[6]]=[[C,B,A]]
+			keg[lsplit[6]]=[C+" - "+B+" - "+A]
 
 	return keg
 	
@@ -54,6 +58,8 @@ def main(argv):
 	else:
 		out=open(args.output,"w")
 		
+	out.write("Locus\tKO_number\tAnnotation\tPahways\n")
+		
 	db=open(args.database_keg)
 	
 	keg=database(db)
@@ -62,14 +68,10 @@ def main(argv):
 		lsplit=line.strip().split("\t")
 		if len(lsplit)>2 and lsplit[1]!="":
 			out.write(lsplit[0]+"\t"+lsplit[1]+"\t"+lsplit[2]+"\t")
-			for item in keg[lsplit[1]]:
-				out.write(" - ".join(item)+" // ")
-			out.write("\n")
+			out.write(" // ".join(keg[lsplit[1]])+"\n")
 		elif len(lsplit)>1 and lsplit[1]!="":
-			out.write(lsplit[0]+"\t"+lsplit[1]+"\t"+lsplit[2]+"\t")
-			for item in keg[lsplit[1]]:
-				out.write(" - ".join(item)+" // ")
-			out.write("\n")
+			out.write(lsplit[0]+"\t"+lsplit[1]+"\t\t")
+			out.write(" // ".join(keg[lsplit[1]])+"\n")
 		elif len(lsplit)>2:
 			out.write("\t".join(lsplit[:3])+"\n")
 		else:
